@@ -3,6 +3,9 @@ title: "Cluster Datastore Options"
 weight: 50
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 The ability to run Kubernetes using a datastore other than etcd sets K3s apart from other Kubernetes distributions. This feature provides flexibility to Kubernetes operators. The available datastore options allow you to select a datastore that best fits your use case. For example:
 
 * If your team doesn't have expertise in operating etcd, you can choose an enterprise-grade SQL database like MySQL or PostgreSQL
@@ -50,27 +53,31 @@ If you only supply `postgres://`  as the endpoint, K3s will attempt to do the fo
 * Create a database named `kubernetes`
 
 
-{{% /tab %}}
-{{% tab "MySQL / MariaDB" %}}
+<Tabs>
+  <TabItem value="MySQL / MariaDB" label="MySQL / MariaDB" default>
 
-In its most common form, the `datastore-endpoint` parameter for MySQL and MariaDB has the following format:
+  In its most common form, the `datastore-endpoint` parameter for MySQL and MariaDB has the following format:
 
-`mysql://username:password@tcp(hostname:3306)/database-name`
+  `mysql://username:password@tcp(hostname:3306)/database-name`
 
-More advanced configuration parameters are available. For more information on these, please see https://github.com/go-sql-driver/mysql#dsn-data-source-name
+  More advanced configuration parameters are available. For more information on these, please see https://github.com/go-sql-driver/mysql#dsn-data-source-name
 
-Note that due to a [known issue](https://github.com/rancher/k3s/issues/1093) in K3s, you cannot set the `tls` parameter. TLS communication is supported, but you cannot, for example, set this parameter to "skip-verify" to cause K3s to skip certificate verification.
+  Note that due to a [known issue](https://github.com/rancher/k3s/issues/1093) in K3s, you cannot set the `tls` parameter. TLS communication is supported, but you cannot, for example, set this parameter to "skip-verify" to cause K3s to skip certificate verification.
 
-If you specify a database name and it does not exist, the server will attempt to create it.
+  If you specify a database name and it does not exist, the server will attempt to create it.
 
-If you only supply `mysql://` as the endpoint, K3s will attempt to do the following:
+  If you only supply `mysql://` as the endpoint, K3s will attempt to do the following:
 
-* Connect to the MySQL socket at `/var/run/mysqld/mysqld.sock` using the `root` user and no password
-* Create a database with the name `kubernetes`
+  <li>
 
+  <ul>Connect to the MySQL socket at `/var/run/mysqld/mysqld.sock` using the `root` user and no password</ul>
+  <ul>Create a database with the name `kubernetes`</ul>
 
-{{% /tab %}}
-{{% tab "etcd" %}}
+  </li>
+
+  </TabItem>
+
+  <TabItem value="etcd" label="etcd">
 
 In its most common form, the `datastore-endpoint` parameter for etcd has the following format:
 
@@ -78,10 +85,10 @@ In its most common form, the `datastore-endpoint` parameter for etcd has the fol
 
 The above assumes a typical three node etcd cluster. The parameter can accept one more comma separated etcd URLs.
 
-{{% /tab %}}
-{{% /tabs %}}
+  </TabItem>
+</Tabs>
 
-<br/>Based on the above, the following example command could be used to launch a server instance that connects to a PostgreSQL database named k3s:
+Based on the above, the following example command could be used to launch a server instance that connects to a PostgreSQL database named k3s:
 ```
 K3S_DATASTORE_ENDPOINT='postgres://username:password@hostname:5432/k3s' k3s server
 ```
@@ -96,4 +103,4 @@ k3s server
 
 ### Embedded etcd for HA
 
-Please see [High Availability with Embedded DB]({{<baseurl>}}/k3s/latest/en/installation/ha-embedded/) for instructions on how to run with this option.
+Please see [High Availability with Embedded DB](/installation/ha-embedded) for instructions on how to run with this option.

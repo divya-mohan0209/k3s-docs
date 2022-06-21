@@ -14,7 +14,7 @@ Single server clusters can meet a variety of use cases, but for environments whe
 * An **external datastore** (as opposed to the embedded SQLite datastore used in single-server setups)
 * A **fixed registration address** that is placed in front of the server nodes to allow agent nodes to register with the cluster
 
-For more details on how these components work together, refer to the [architecture section.]({{<baseurl>}}/k3s/latest/en/architecture/#high-availability-with-an-external-db)
+For more details on how these components work together, refer to the [architecture section.](/architecture#high-availability-with-an-external-db)
 
 Agents register through the fixed registration address, but after registration they establish a connection directly to one of the server nodes. This is a websocket connection initiated by the `k3s agent` process and it is maintained by a client-side load balancer running as part of the agent process.
 
@@ -28,14 +28,14 @@ Setting up an HA cluster requires the following steps:
 4. [Join agent nodes](#4-optional-join-agent-nodes)
 
 ### 1. Create an External Datastore
-You will first need to create an external datastore for the cluster. See the [Cluster Datastore Options]({{<baseurl>}}/k3s/latest/en/installation/datastore/) documentation for more details.
+You will first need to create an external datastore for the cluster. See the [Cluster Datastore Options](/installation/datastore) documentation for more details.
 
 ### 2. Launch Server Nodes
-K3s requires two or more server nodes for this HA configuration. See the [Installation Requirements]({{<baseurl>}}/k3s/latest/en/installation/installation-requirements/) guide for minimum machine requirements.
+K3s requires two or more server nodes for this HA configuration. See the [Installation Requirements](/installation/installation-requirements) guide for minimum machine requirements.
 
 When running the `k3s server` command on these nodes, you must set the `datastore-endpoint` parameter so that K3s knows how to connect to the external datastore. The `token` parameter can also be used to set a deterministic token when adding nodes. When empty, this token will be generated automatically for further use.
 
-For example, a command like the following could be used to install the K3s server with a MySQL database as the external datastore and [set a token]({{<baseurl>}}/k3s/latest/en/installation/install-options/server-config/#cluster-options):
+For example, a command like the following could be used to install the K3s server with a MySQL database as the external datastore and [set a token](/installation/install-options/server-config/server-config#cluster-options):
 
 ```bash
 curl -sfL https://get.k3s.io | sh -s - server \
@@ -43,13 +43,15 @@ curl -sfL https://get.k3s.io | sh -s - server \
   --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database-name"
 ```
 
-The datastore endpoint format differs based on the database type. For details, refer to the section on [datastore endpoint formats.]({{<baseurl>}}/k3s/latest/en/installation/datastore/#datastore-endpoint-format-and-functionality)
+The datastore endpoint format differs based on the database type. For details, refer to the section on [datastore endpoint formats.](/installation/datastore/datastore#datastore-endpoint-format-and-functionality)
 
-To configure TLS certificates when launching server nodes, refer to the [datastore configuration guide.]({{<baseurl>}}/k3s/latest/en/installation/datastore/#external-datastore-configuration-parameters)
+To configure TLS certificates when launching server nodes, refer to the [datastore configuration guide.](/installation/datastore/datastore#external-datastore-configuration-parameters)
 
-> **Note:** The same installation options available to single-server installs are also available for high-availability installs. For more details, see the [Installation and Configuration Options]({{<baseurl>}}/k3s/latest/en/installation/install-options/) documentation.
+:::note
+The same installation options available to single-server installs are also available for high-availability installs. For more details, see the [Installation and Configuration Options](/installation/install-options/install-options) documentation.
+:::
 
-By default, server nodes will be schedulable and thus your workloads can get launched on them. If you wish to have a dedicated control plane where no user workloads will run, you can use taints. The <span style='white-space: nowrap'>`node-taint`</span> parameter will allow you to configure nodes with taints, for example <span style='white-space: nowrap'>`--node-taint CriticalAddonsOnly=true:NoExecute`</span>.
+By default, server nodes will be schedulable and thus your workloads can get launched on them. If you wish to have a dedicated control plane where no user workloads will run, you can use taints. The `node-taint` parameter will allow you to configure nodes with taints, for example `--node-taint CriticalAddonsOnly=true:NoExecute`.
 
 Once you've launched the `k3s server` process on all server nodes, ensure that the cluster has come up properly with `k3s kubectl get nodes`. You should see your server nodes in the Ready state.
 
@@ -72,7 +74,7 @@ If the first server node was started without the `--token` CLI flag or `K3S_TOKE
 cat /var/lib/rancher/k3s/server/token
 ```
 
-Additional server nodes can then be added [using the token]({{<baseurl>}}/k3s/latest/en/installation/install-options/server-config/#cluster-options):
+Additional server nodes can then be added [using the token](/installation/install-options/server-config/server-config#cluster-options):
 
 ```bash
 curl -sfL https://get.k3s.io | sh -s - server \
@@ -86,7 +88,9 @@ There are a few config flags that must be the same in all server nodes:
 * Flags controlling the deployment of certain components: `--disable-helm-controller`, `--disable-kube-proxy`, `--disable-network-policy` and any component passed to `--disable`
 * Feature related flags: `--secrets-encryption`
 
-> **Note:** Ensure that you retain a copy of this token as it is required when restoring from backup and adding nodes. Previously, K3s did not enforce the use of a token when using external SQL datastores.
+:::note
+Ensure that you retain a copy of this token as it is required when restoring from backup and adding nodes. Previously, K3s did not enforce the use of a token when using external SQL datastores.
+:::
 
 ### 5. Optional: Join Agent Nodes
 
