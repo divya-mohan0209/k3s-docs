@@ -18,16 +18,13 @@ module.exports = {
 
       // Hides the switch in the navbar
       // Useful if you want to support a single color mode
-      disableSwitch: true,
-    },
-    prism: {
-      additionalLanguages: ['rust'],
+      disableSwitch: false,
     },
     navbar: {
       title: "",
       logo: {
         alt: 'logo',
-        src: 'img/rancher-logo-horiz-color.svg',
+        src: 'img/k3s-horizontal-color.svg',
       },
       items: [
         {
