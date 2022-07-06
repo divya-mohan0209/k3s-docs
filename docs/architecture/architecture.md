@@ -19,7 +19,7 @@ This page covers the following topics:
 - [How agent node registration works](#how-agent-node-registration-works)
 - [Automatically deployed manifests](#automatically-deployed-manifests)
 
-# Single-server Setup with an Embedded DB
+### Single-server Setup with an Embedded DB
 
 The following diagram shows an example of a cluster that has a single-node K3s server with an embedded SQLite database.
 
@@ -27,7 +27,7 @@ In this configuration, each agent node is registered to the same server node. A 
 
 <Figure caption="K3s Architecture with a Single Server" src="/img/k3s-architecture-single-server.png" />
 
-# High-Availability K3s Server with an External DB
+### High-Availability K3s Server with an External DB
 
 Single server clusters can meet a variety of use cases, but for environments where uptime of the Kubernetes control plane is critical, you can run K3s in an HA configuration. An HA K3s cluster is comprised of:
 
@@ -44,7 +44,7 @@ After registration, the agent nodes establish a connection directly to one of th
 
 <Figure caption="k3s HA" src="/img/k3s-production-setup.svg" />
 
-# How Agent Node Registration Works
+### How Agent Node Registration Works
 
 Agent nodes are registered with a websocket connection initiated by the `k3s agent` process, and the connection is maintained by a client-side load balancer running as part of the agent process.
 
@@ -56,6 +56,6 @@ If the `/etc/rancher/node` directory of an agent is removed, the password file s
 
 A unique node ID can be appended to the hostname by launching K3s servers or agents using the `--with-node-id` flag.
 
-# Automatically Deployed Manifests
+### Automatically Deployed Manifests
 
 The [manifests](https://github.com/rancher/k3s/tree/master/manifests) located at the directory path `/var/lib/rancher/k3s/server/manifests` are bundled into the K3s binary at build time.  These will be installed at runtime by the [rancher/helm-controller.](https://github.com/rancher/helm-controller#helm-controller)

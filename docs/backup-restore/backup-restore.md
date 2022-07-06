@@ -8,7 +8,7 @@ The way K3s is backed up and restored depends on which type of datastore is used
 - [Backup and Restore with External Datastore](#backup-and-restore-with-external-datastore)
 - [Backup and Restore with Embedded etcd Datastore (Experimental)](#backup-and-restore-with-embedded-etcd-datastore-experimental)
 
-# Backup and Restore with External Datastore
+### Backup and Restore with External Datastore
 
 When an external datastore is used, backup and restore operations are handled outside of K3s. The database administrator will need to back up the external database, or restore it from a snapshot or dump.
 
@@ -20,7 +20,7 @@ For details on taking database snapshots and restoring your database from them, 
 - [Official PostgreSQL documentation](https://www.postgresql.org/docs/8.3/backup-dump.html)
 - [Official etcd documentation](https://etcd.io/docs/latest/op-guide/recovery/)
 
-# Backup and Restore with Embedded etcd Datastore (Experimental)
+### Backup and Restore with Embedded etcd Datastore (Experimental)
 
 _Available as of v1.19.1+k3s1_
 
@@ -28,7 +28,7 @@ In this section, you'll learn how to create backups of the K3s cluster data and 
 
 >**Note on Single-Server with embedded SQLite:** Currently, backups of SQLite are not supported. Instead, make a copy of `/var/lib/rancher/k3s/server` and then delete K3s. 
 
-### Creating Snapshots
+#### Creating Snapshots
 
 Snapshots are enabled by default.
 
@@ -36,7 +36,7 @@ The snapshot directory defaults to `${data-dir}/server/db/snapshots`. The data-d
 
 To configure the snapshot interval or the number of retained snapshots, refer to the [options.](#options)
 
-### Restoring a Cluster from a Snapshot
+#### Restoring a Cluster from a Snapshot
 
 When K3s is restored from backup, the old data directory will be moved to `${data-dir}/server/db/etcd-old/`. Then K3s will attempt to restore the snapshot by creating a new data directory, then starting etcd with a new K3s cluster with one etcd member.
 
@@ -50,7 +50,7 @@ To restore the cluster from backup, run K3s with the `--cluster-reset` option, w
 
 **Result:**  A message in the logs says that K3s can be restarted without the flags. Start k3s again and should run successfully and be restored from the specified snapshot.
 
-### Options
+#### Options
 
 These options can be passed in with the command line, or in the [configuration file,](/installation/install-options/#configuration-file ) which may be easier to use.
 
@@ -63,7 +63,7 @@ These options can be passed in with the command line, or in the [configuration f
 | `--cluster-reset`  | Forget all peers and become sole member of a new cluster. This can also be set with the environment variable `[$K3S_CLUSTER_RESET]`.
 | `--cluster-reset-restore-path` value | Path to snapshot file to be restored
 
-### S3 Compatible API Support
+#### S3 Compatible API Support
 
 K3s supports writing etcd snapshots to and restoring etcd snapshots from systems with S3-compatible APIs. S3 support is available for both on-demand and scheduled snapshots.
 
@@ -104,7 +104,7 @@ k3s server \
   --etcd-s3-secret-key=<S3-SECRET-KEY>
 ```
 
-### Etcd Snapshot and Restore Subcommands
+#### Etcd Snapshot and Restore Subcommands
 
 k3s supports a set of subcommands for working with your etcd snapshots.
 
